@@ -66,6 +66,7 @@ custom_theme = ColorPalette(
     surface="#1E1E1E",
     text_primary="#FFFFFF",
     text_secondary="#B0B0B0",
+    text_on_primary="#FFFFFF",
     error="#F44336",
     success="#4CAF50",
     warning="#FF9800",

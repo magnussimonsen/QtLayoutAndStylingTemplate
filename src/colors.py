@@ -22,6 +22,7 @@ class ColorPalette:
     surface: str
     text_primary: str
     text_secondary: str
+    text_on_primary: str  # Text color for use on primary-colored backgrounds
     error: str
     success: str
     warning: str
@@ -41,6 +42,7 @@ THEMES: Dict[str, ColorPalette] = {
         surface="#2D2D3D",
         text_primary="#FFFFFF",
         text_secondary="#A1A1AA",
+        text_on_primary="#FFFFFF",
         error="#EF4444",
         success="#22C55E",
         warning="#F59E0B",
@@ -57,6 +59,7 @@ THEMES: Dict[str, ColorPalette] = {
         surface="#FFFFFF",
         text_primary="#1E293B",
         text_secondary="#64748B",
+        text_on_primary="#FFFFFF",
         error="#DC2626",
         success="#16A34A",
         warning="#D97706",
@@ -73,6 +76,7 @@ THEMES: Dict[str, ColorPalette] = {
         surface="#1E293B",
         text_primary="#F1F5F9",
         text_secondary="#94A3B8",
+        text_on_primary="#FFFFFF",
         error="#F43F5E",
         success="#10B981",
         warning="#FBBF24",
@@ -89,6 +93,7 @@ THEMES: Dict[str, ColorPalette] = {
         surface="#166534",
         text_primary="#ECFDF5",
         text_secondary="#BBF7D0",
+        text_on_primary="#FFFFFF",
         error="#EF4444",
         success="#22C55E",
         warning="#EAB308",

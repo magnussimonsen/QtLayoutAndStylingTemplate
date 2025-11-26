@@ -140,10 +140,10 @@ class MainWindow(QMainWindow):
         ]
 
         for name, color in colors:
-            swatch = self._create_color_swatch(name, color)
+            swatch = self._create_color_swatch(name, color, palette)
             self.color_layout.addWidget(swatch)
 
-    def _create_color_swatch(self, name: str, color: str) -> QFrame:
+    def _create_color_swatch(self, name: str, color: str, palette: ColorPalette) -> QFrame:
         """Create a color swatch widget."""
         frame = QFrame()
         frame.setMinimumSize(80, 100)
@@ -151,7 +151,7 @@ class MainWindow(QMainWindow):
             QFrame {{
                 background-color: {color};
                 border-radius: 8px;
-                border: 2px solid white;
+                border: 2px solid {palette.text_on_primary};
             }}
         """)
 
@@ -159,8 +159,8 @@ class MainWindow(QMainWindow):
         layout.setAlignment(Qt.AlignmentFlag.AlignBottom)
 
         label = QLabel(name)
-        label.setStyleSheet("""
-            color: white;
+        label.setStyleSheet(f"""
+            color: {palette.text_on_primary};
             font-size: 10px;
             font-weight: bold;
             background-color: rgba(0, 0, 0, 0.5);
@@ -171,8 +171,8 @@ class MainWindow(QMainWindow):
         layout.addWidget(label)
 
         color_code = QLabel(color)
-        color_code.setStyleSheet("""
-            color: white;
+        color_code.setStyleSheet(f"""
+            color: {palette.text_on_primary};
             font-size: 9px;
             background-color: rgba(0, 0, 0, 0.5);
             padding: 2px;

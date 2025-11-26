@@ -48,7 +48,7 @@ QGroupBox::title {{
 /* Button Styling */
 QPushButton {{
     background-color: {palette.primary};
-    color: white;
+    color: {palette.text_on_primary};
     border: none;
     border-radius: 6px;
     padding: 10px 20px;
@@ -248,7 +248,7 @@ QTabBar::tab {{
 
 QTabBar::tab:selected {{
     background-color: {palette.primary};
-    color: white;
+    color: {palette.text_on_primary};
 }}
 
 QTabBar::tab:hover:!selected {{
