@@ -25,14 +25,14 @@ class ModeAwareColor:
 
 class _BGTokens:
     app = ModeAwareColor(light="#f4f4f4", dark="#1e1e1e")
-    menubar = ModeAwareColor(light="#c91919", dark="#2b2b2b")
-    statusbar = ModeAwareColor(light="#f7f7f7", dark="#252525")
-    dropdown = ModeAwareColor(light="#ffffff", dark="#333333")
-    cell = ModeAwareColor(light="#ffffff", dark="#1f1f1f")
-    cell_gutter = ModeAwareColor(light="#ededed", dark="#181818")
-    toolbar = ModeAwareColor(light="#009B00", dark="#2a2a2a")
-    sidebar = ModeAwareColor(light="#EE0000", dark="#2a2a2a")
-    sidebar_toolbar = ModeAwareColor(light="#A70707", dark="#333333")
+    menubar = ModeAwareColor(light="#c91919", dark="#2b2b2b")# Dont work
+    statusbar = ModeAwareColor(light="#002fff", dark="#252525")# Dont work
+    dropdown = ModeAwareColor(light="#0138ff", dark="#333333") # Dont work
+    cell = ModeAwareColor(light="#cf1616", dark="#1f1f1f") # Works
+    cell_gutter = ModeAwareColor(light="#f700ff", dark="#181818") # Works
+    toolbar = ModeAwareColor(light="#009B00", dark="#2a2a2a")  # Dont work
+    sidebar = ModeAwareColor(light="#EE0000", dark="#2a2a2a") # Dont work 
+    sidebar_toolbar = ModeAwareColor(light="#A70707", dark="#333333") # Dont work
 
 
 class _BorderTokens:
@@ -41,7 +41,7 @@ class _BorderTokens:
     highlight = ModeAwareColor(light="#4a90e2", dark="#5a5a5a")
     cell = ModeAwareColor(light="#cfcfcf", dark="#3a3a3a")
     cell_gutter = ModeAwareColor(light="#d5d5d5", dark="#2a2a2a")
-    cell_in_focus = ModeAwareColor(light="#4a90e2", dark="#5ea2ff")
+    cell_in_focus = ModeAwareColor(light="#ff0000", dark="#5ea2ff")
 
 class _TextTokens:
     primary = ModeAwareColor(light="#111111", dark="#fafafa")

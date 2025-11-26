@@ -15,6 +15,11 @@ if SRC_DIR.exists() and str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
 from src.ui import NotebookSidebarWidget, SettingsSidebarWidget
+from PySide6.QtCore import qInstallMessageHandler
+
+
+def qt_handler(mode, context, message):  # pragma: no cover - debug helper
+    print("QT:", message)
 
 def _load_qt_widgets():  # pragma: no cover - import helper
     try:
@@ -474,6 +479,17 @@ def main() -> None:
     mode = ThemeMode(args.mode)
 
     app = QApplication(sys.argv)
+    qInstallMessageHandler(qt_handler)
+    # Debug: dump the exact stylesheet string Qt will parse
+    try:
+        from style_loader import build_application_qss  # type: ignore
+
+        qss_dump = build_application_qss(mode=mode)
+        with open("qss_runtime_dump.txt", "w", encoding="utf-8") as f:
+            f.write(qss_dump)
+    except Exception as e:  # pragma: no cover - debug only
+        print("Error while dumping runtime QSS:", e)
+
     apply_global_style(app, mode=mode)
 
     window = DemoWindow(app, mode)

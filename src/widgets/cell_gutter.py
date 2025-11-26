@@ -43,7 +43,7 @@ def get_qss(
         {GUTTER_SELECTOR} > {GUTTER_LABEL_SELECTOR} {{
             color: {text.secondary};
             min-width: 32px;
-            qproperty-alignment: AlignRight | AlignVCenter;
+            qproperty-alignment: 'AlignRight | AlignVCenter';
             font-family: {metrics.font_family};
             font-size: {metrics.font_size_small}pt;
         }}
