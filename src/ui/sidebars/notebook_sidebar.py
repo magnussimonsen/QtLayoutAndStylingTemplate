@@ -4,6 +4,7 @@ from __future__ import annotations
 
 try:  # pragma: no cover - only imported when Qt is available
     from PySide6.QtCore import Qt, Signal
+    from PySide6.QtGui import QPalette, QColor
     from PySide6.QtWidgets import (
         QAbstractItemView,
         QListWidget,
@@ -27,36 +28,59 @@ class NotebookSidebarWidget(QWidget):
 
     def __init__(self, parent: QWidget | None = None) -> None:
         super().__init__(parent)
+        self.setObjectName("NotebookSidebarPanel")
+        self.setAutoFillBackground(True)
         self._is_updating = False
         self._build_ui()
 
     def _build_ui(self) -> None:
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(12, 12, 12, 12)
-        layout.setSpacing(12)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
 
-        action_row = SidebarActionRow(self)
-        add_button = QPushButton("Add Notebook", self)
-        add_button.clicked.connect(self.add_notebook_clicked)
-        action_row.add_widget(add_button)
-        action_row.add_spacer()
-        layout.addWidget(action_row)
+        # Add toolbar placeholder
+        from PySide6.QtWidgets import QLabel, QWidget
+        toolbar = QWidget(self)
+        toolbar.setProperty("sidebarRole", "toolbar")
+        toolbar.setAutoFillBackground(True)
+        toolbar_label = QLabel("Toolbar Area", toolbar)
+        from PySide6.QtWidgets import QHBoxLayout
+        toolbar_layout = QHBoxLayout(toolbar)
+        toolbar_layout.setContentsMargins(8, 8, 8, 8)
+        toolbar_layout.addWidget(toolbar_label)
+        layout.addWidget(toolbar)
 
-        list_widget = QListWidget(self)
-        list_widget.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
-        list_widget.setEditTriggers(
-            QAbstractItemView.EditTrigger.DoubleClicked
-            | QAbstractItemView.EditTrigger.EditKeyPressed
-        )
-        list_widget.itemSelectionChanged.connect(self._on_selection_changed)
-        list_widget.itemChanged.connect(self._on_item_changed)
-        layout.addWidget(list_widget)
+        # Add a simple label to test if content shows with sidebar_content background
+        test_label = QLabel("Notebook Panel Content", self)
+        test_label.setStyleSheet("background-color: #F5FF66; color: #111111; padding: 20px;")
+        layout.addWidget(test_label)
+        layout.addStretch()
 
-        self._list = list_widget
-        self._add_button = add_button
+        # Temporarily removed all other content for debugging
+        # action_row = SidebarActionRow(self)
+        # add_button = QPushButton("Add Notebook", self)
+        # add_button.clicked.connect(self.add_notebook_clicked)
+        # action_row.add_widget(add_button)
+        # action_row.add_spacer()
+        # layout.addWidget(action_row)
+
+        # list_widget = QListWidget(self)
+        # list_widget.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
+        # list_widget.setEditTriggers(
+        #     QAbstractItemView.EditTrigger.DoubleClicked
+        #     | QAbstractItemView.EditTrigger.EditKeyPressed
+        # )
+        # list_widget.itemSelectionChanged.connect(self._on_selection_changed)
+        # list_widget.itemChanged.connect(self._on_item_changed)
+        # layout.addWidget(list_widget)
+
+        self._list = None
+        self._add_button = None
 
     def set_notebooks(self, notebooks: list[dict[str, str]], active_notebook_id: str | None) -> None:
         """Populate the list with the provided notebook metadata."""
+        if not self._list:
+            return
 
         self._is_updating = True
         self._list.clear()
@@ -74,7 +98,7 @@ class NotebookSidebarWidget(QWidget):
         self._is_updating = False
 
     def set_active_notebook(self, notebook_id: str) -> None:
-        if not notebook_id:
+        if not notebook_id or not self._list:
             return
 
         self._is_updating = True
@@ -86,10 +110,11 @@ class NotebookSidebarWidget(QWidget):
         self._is_updating = False
 
     def focus_add_button(self) -> None:
-        self._add_button.setFocus()
+        if self._add_button:
+            self._add_button.setFocus()
 
     def _on_selection_changed(self) -> None:
-        if self._is_updating:
+        if self._is_updating or not self._list:
             return
 
         item = self._list.currentItem()

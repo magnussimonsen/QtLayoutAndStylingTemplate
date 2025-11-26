@@ -197,9 +197,6 @@ class DemoWindow(QMainWindow):
         self._settings_panel: SettingsSidebarWidget | None = None
         self._notebooks_dock: QDockWidgetType | None = None
         self._settings_dock: QDockWidgetType | None = None
-        self._notebook_entries: list[dict[str, str]] = []
-        self._next_notebook_index = 1
-        self._active_notebook_id: str | None = None
         self._notebooks_button: QPushButtonType | None = None
         self._settings_button: QPushButtonType | None = None
 
@@ -338,19 +335,8 @@ class DemoWindow(QMainWindow):
         self.setStatusBar(status)
 
     def _build_sidebars(self) -> None:
-        self._notebook_entries = [
-            {"notebook_id": "notebook-01", "title": "Physics Warmups"},
-            {"notebook_id": "notebook-02", "title": "Statistics Notes"},
-            {"notebook_id": "notebook-03", "title": "Blank Notebook"},
-        ]
-        self._next_notebook_index = len(self._notebook_entries) + 1
-        self._active_notebook_id = self._notebook_entries[0]["notebook_id"]
-
         notebooks_dock = self._create_sidebar_dock("NotebooksDock", "Notebooks")
         notebooks_panel = NotebookSidebarWidget(self)
-        notebooks_panel.add_notebook_clicked.connect(self._handle_sidebar_add_notebook)
-        notebooks_panel.notebook_selected.connect(self._handle_sidebar_select_notebook)
-        notebooks_panel.rename_notebook_requested.connect(self._handle_sidebar_rename_notebook)
         notebooks_dock.setWidget(notebooks_panel)
         notebooks_dock.hide()
 
@@ -363,8 +349,6 @@ class DemoWindow(QMainWindow):
         self._settings_dock = settings_dock
         self._notebooks_panel = notebooks_panel
         self._settings_panel = settings_panel
-
-        self._refresh_notebook_sidebar()
 
     def _create_sidebar_dock(self, object_name: str, title: str) -> QDockWidgetType:
         dock = QDockWidget(title, self)
@@ -410,39 +394,7 @@ class DemoWindow(QMainWindow):
         else:
             self._settings_dock.hide()
 
-    def _handle_sidebar_add_notebook(self) -> None:
-        new_id = f"notebook-{self._next_notebook_index:02d}"
-        self._next_notebook_index += 1
-        entry = {"notebook_id": new_id, "title": f"Notebook {self._next_notebook_index - 1:02d}"}
-        self._notebook_entries.insert(0, entry)
-        self._active_notebook_id = new_id
-        self._refresh_notebook_sidebar()
-        self._show_status("Notebook added")
 
-    def _handle_sidebar_select_notebook(self, notebook_id: str) -> None:
-        self._active_notebook_id = notebook_id
-        if self._notebooks_panel:
-            self._notebooks_panel.set_active_notebook(notebook_id)
-        title = next((nb["title"] for nb in self._notebook_entries if nb["notebook_id"] == notebook_id), None)
-        if title:
-            self._show_status(f"Selected {title}")
-
-    def _handle_sidebar_rename_notebook(self, notebook_id: str, new_title: str) -> None:
-        for notebook in self._notebook_entries:
-            if notebook["notebook_id"] == notebook_id:
-                notebook["title"] = new_title
-                self._show_status("Notebook renamed")
-                break
-
-    def _refresh_notebook_sidebar(self) -> None:
-        if not self._notebooks_panel:
-            return
-        self._notebooks_panel.set_notebooks(list(self._notebook_entries), self._active_notebook_id)
-
-    def _show_status(self, message: str) -> None:
-        status = self.statusBar()
-        if status:
-            status.showMessage(message, 2500)
 
     def _switch_theme(self, mode) -> None:
         if mode == self._mode:

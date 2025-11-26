@@ -24,16 +24,16 @@ class ModeAwareColor:
 # --- Mode-aware tokens ----------------------------------------------------
 
 class _BGTokens:
-    app = ModeAwareColor(light="#f4f4f4", dark="#1e1e1e")
-    menubar = ModeAwareColor(light="#c91919", dark="#2b2b2b")# Dont work
-    statusbar = ModeAwareColor(light="#002fff", dark="#252525")# Dont work
-    dropdown = ModeAwareColor(light="#0138ff", dark="#333333") # Dont work
-    cell = ModeAwareColor(light="#cf1616", dark="#1f1f1f") # Works
-    cell_gutter = ModeAwareColor(light="#f700ff", dark="#181818") # Works
-    toolbar = ModeAwareColor(light="#009B00", dark="#2a2a2a")  # Dont work
-    sidebar = ModeAwareColor(light="#EE0000", dark="#2a2a2a") # Dont work 
-    sidebar_toolbar = ModeAwareColor(light="#A70707", dark="#333333") # Dont work
-
+    app = ModeAwareColor(light="#00950a", dark="#1e1e1e")
+    menubar = ModeAwareColor(light="#b20e0e", dark="#2b2b2b")
+    statusbar = ModeAwareColor(light="#002fff", dark="#252525")
+    dropdown = ModeAwareColor(light="#0138ff", dark="#333333") 
+    cell = ModeAwareColor(light="#b5b5b5", dark="#1f1f1f") 
+    cell_gutter = ModeAwareColor(light="#f700ff", dark="#181818") 
+    toolbar = ModeAwareColor(light="#008E9B", dark="#2a2a2a")  
+    sidebar_header = ModeAwareColor(light="#C266FF", dark="#2a2a2a") 
+    sidebar_content = ModeAwareColor(light="#F5FF66", dark="#2a2a2a") 
+    sidebar_toolbar = ModeAwareColor(light="#A70707", dark="#333333") 
 
 class _BorderTokens:
     subtle = ModeAwareColor(light="#dcdcdc", dark="#2d2d2d")
@@ -129,8 +129,10 @@ class BackgroundPalette:
     cell: str
     cell_gutter: str
     toolbar: str
-    sidebar: str
+    sidebar_header: str
     sidebar_toolbar: str
+    sidebar_content: str
+    
 
 @dataclass(frozen=True)
 class BorderPalette:
@@ -208,7 +210,8 @@ def _resolve_bg(mode: ThemeMode) -> BackgroundPalette:
         cell=tokens.cell.value_for(mode),
         cell_gutter=tokens.cell_gutter.value_for(mode),
         toolbar=tokens.toolbar.value_for(mode),
-        sidebar=tokens.sidebar.value_for(mode),
+        sidebar_header=tokens.sidebar_header.value_for(mode),
+        sidebar_content=tokens.sidebar_content.value_for(mode),
         sidebar_toolbar=tokens.sidebar_toolbar.value_for(mode),
     )
 

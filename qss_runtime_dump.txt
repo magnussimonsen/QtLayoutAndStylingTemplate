@@ -1,12 +1,33 @@
 QWidget {
-        background-color: #f4f4f4;
+        background-color: #00950a;
         color: #111111;
         font-family: Segoe UI, 'Noto Sans', sans-serif;
         font-size: 12pt;
     }
 
+    QDockWidget#NotebooksDock,
+    QDockWidget#SettingsDock,
+    QDockWidget#NotebooksDock > QWidget,
+    QDockWidget#SettingsDock > QWidget,
+    QDockWidget#NotebooksDock QWidget#NotebookSidebarPanel,
+    QDockWidget#SettingsDock QWidget#SettingsSidebarPanel {
+        background-color: #F5FF66;
+        color: #111111;
+    }
+
+    QDockWidget#NotebooksDock QWidget[sidebarRole="toolbar"],
+    QDockWidget#SettingsDock QWidget[sidebarRole="toolbar"] {
+        background-color: #A70707;
+        color: #111111;
+    }
+
+    QDockWidget#NotebooksDock QListWidget,
+    QDockWidget#SettingsDock QListWidget {
+        color: #111111;
+    }
+
     QToolBar {
-        background-color: #009B00;
+        background-color: #008E9B;
         spacing: 4px;
         padding: 0 4px;
     }
@@ -128,7 +149,7 @@ QWidget[cellType="list"] {
 }
 
 QFrame[cellType="container"] {
-    background-color: #cf1616;
+    background-color: #b5b5b5;
     border: 1px solid #cfcfcf;
     border-radius: 4px;
     padding: 6px;
@@ -154,7 +175,7 @@ QFrame[cellType="container"] > QWidget[cellPart="body"] {
 
 QFrame[cellType="container"] QTextEdit,
 QFrame[cellType="container"] QTableView {
-    background-color: #cf1616;
+    background-color: #b5b5b5;
     alternate-background-color: #f6f6f6;
     color: #111111;
     selection-background-color: #cfe1ff;
@@ -183,12 +204,12 @@ QWidget[cellType="gutter"] > QLabel[cellRole="line-number"] {
 }
 
 QMenuBar#MainMenuBar {
-    background-color: #c91919;
+    background-color: #b20e0e;
     color: #111111;
     spacing: 4px;
     padding: 0 6px;
-    border-bottom: 1px solid #f4f4f4;
-    border-top: 1px solid #f4f4f4;
+    border-bottom: 1px solid #00950a;
+    border-top: 1px solid #00950a;
     min-height: 28px;
     font-family: Segoe UI, 'Noto Sans', sans-serif;
     font-size: 12pt;
@@ -230,19 +251,83 @@ QMenu[menuRole="primary"]::separator {
 }
 
 QDockWidget#NotebooksDock, QDockWidget#SettingsDock {
-    background-color: #EE0000;
+    background-color: #F5FF66;
     color: #111111;
     border-left: 1px solid #bcbcbc;
 }
 
-QDockWidget#NotebooksDock, QDockWidget#SettingsDock QWidget {
-    background-color: #EE0000;
+QDockWidget#NotebooksDock::title,
+QDockWidget#SettingsDock::title {
+    background-color: #C266FF;
+    color: #111111;
+    text-align: left;
+    padding: 4px;
+}
+
+QDockWidget#NotebooksDock, QDockWidget#SettingsDock > QWidget {
+    background-color: #F5FF66;
+}
+
+QDockWidget#NotebooksDock QWidget#NotebookSidebarPanel,
+QDockWidget#SettingsDock QWidget#SettingsSidebarPanel {
+    background-color: #F5FF66;
+}
+
+QWidget[sidebarRole="toolbar"] {
+    background-color: #A70707;
+    color: #111111;
+    padding: 4px;
+    border-bottom: 1px solid #bcbcbc;
+}
+
+QWidget[sidebarRole="toolbar"] QLabel {
+    color: #111111;
 }
 
 QWidget[sidebarRole="action-row"] {
     background-color: #A70707;
     border-radius: 2px;
     padding: 2px 4px;
+}
+
+QDockWidget#NotebooksDock QListWidget,
+QDockWidget#SettingsDock QListWidget {
+    background-color: transparent;
+    border: none;
+    color: #111111;
+}
+
+QDockWidget#NotebooksDock QListWidget::item,
+QDockWidget#SettingsDock QListWidget::item {
+    background-color: transparent;
+    color: #111111;
+}
+
+QDockWidget#NotebooksDock QListWidget::item:selected,
+QDockWidget#SettingsDock QListWidget::item:selected {
+    background-color: #A70707;
+    color: #111111;
+}
+
+QDockWidget#NotebooksDock QComboBox,
+QDockWidget#SettingsDock QComboBox,
+QDockWidget#NotebooksDock QSpinBox,
+QDockWidget#SettingsDock QSpinBox {
+    background-color: #F5FF66;
+    border: 1px solid #dcdcdc;
+    padding: 4px;
+}
+
+QDockWidget#NotebooksDock QComboBox:hover,
+QDockWidget#SettingsDock QComboBox:hover,
+QDockWidget#NotebooksDock QSpinBox:hover,
+QDockWidget#SettingsDock QSpinBox:hover {
+    border-color: #bcbcbc;
+}
+
+QDockWidget#NotebooksDock QLabel,
+QDockWidget#SettingsDock QLabel {
+    background-color: transparent;
 }
 
 QStatusBar#MainStatusBar {

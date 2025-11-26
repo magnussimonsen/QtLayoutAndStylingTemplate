@@ -20,16 +20,39 @@ STYLE_MODULES = (
 
 def _base_style(theme: Theme) -> str:
     metrics = theme.metrics
+    bg = theme.bg
+    text = theme.text
     return f"""
     QWidget {{
-        background-color: {theme.bg.app};
-        color: {theme.text.primary};
+        background-color: {bg.app};
+        color: {text.primary};
         font-family: {metrics.font_family};
         font-size: {metrics.font_size_medium}pt;
     }}
 
+    QDockWidget#NotebooksDock,
+    QDockWidget#SettingsDock,
+    QDockWidget#NotebooksDock > QWidget,
+    QDockWidget#SettingsDock > QWidget,
+    QDockWidget#NotebooksDock QWidget#NotebookSidebarPanel,
+    QDockWidget#SettingsDock QWidget#SettingsSidebarPanel {{
+        background-color: {bg.sidebar_content};
+        color: {text.primary};
+    }}
+
+    QDockWidget#NotebooksDock QWidget[sidebarRole="toolbar"],
+    QDockWidget#SettingsDock QWidget[sidebarRole="toolbar"] {{
+        background-color: {bg.sidebar_toolbar};
+        color: {text.primary};
+    }}
+
+    QDockWidget#NotebooksDock QListWidget,
+    QDockWidget#SettingsDock QListWidget {{
+        color: {text.primary};
+    }}
+
     QToolBar {{
-        background-color: {theme.bg.toolbar};
+        background-color: {bg.toolbar};
         spacing: {metrics.padding_small}px;
         padding: 0 {metrics.padding_small}px;
     }}

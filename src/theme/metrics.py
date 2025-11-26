@@ -23,6 +23,11 @@ class Metrics:
     menubar_height: int = 28
     statusbar_height: int = 24
 
+    # Sidebar sizing
+    sidebar_default_width: int = 320
+    sidebar_min_width: int = 220
+    sidebar_max_width: int = 560
+
     font_family: str = "Segoe UI, 'Noto Sans', sans-serif"
     font_size_small: int = 11
     font_size_medium: int = 12
