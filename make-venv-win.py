@@ -42,6 +42,5 @@ def main() -> None:
 
 	launch_shell_with_venv(venv_path)
 
-
 if __name__ == "__main__":
 	main()
