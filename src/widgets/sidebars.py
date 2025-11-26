@@ -62,6 +62,11 @@ def get_qss(
             color: {text.primary};
         }}
 
+        QWidget[sidebarRole="content"] {{
+            background-color: {bg.sidebar_content};
+            color: {text.primary};
+        }}
+
         {SIDEBAR_ACTION_ROW_SELECTOR} {{
             background-color: {bg.sidebar_toolbar};
             border-radius: {metrics.radius_small}px;
@@ -111,6 +116,7 @@ def get_qss(
         QDockWidget#NotebooksDock QLabel,
         QDockWidget#SettingsDock QLabel {{
             background-color: transparent;
+            color: {text.primary};
         }}
         """
     ).strip()

@@ -1,4 +1,4 @@
-"""Shared row layout used across sidebar panels."""
+"""Shared toolbar layout used across sidebar panels."""
 
 from __future__ import annotations
 
@@ -8,14 +8,15 @@ except ModuleNotFoundError as exc:  # pragma: no cover - runtime guard
     raise SystemExit("PySide6 must be installed to use the sidebar widgets.") from exc
 
 
-class SidebarActionRow(QWidget):
-    """Simple horizontal container for action buttons inside a sidebar."""
+class SidebarToolbar(QWidget):
+    """Horizontal toolbar container for sidebar action buttons and controls."""
 
     def __init__(self, parent: QWidget | None = None) -> None:
         super().__init__(parent)
-        self.setProperty("sidebarRole", "action-row")
+        self.setProperty("sidebarRole", "toolbar")
+        self.setAutoFillBackground(True)
         layout = QHBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setContentsMargins(8, 8, 8, 8)
         layout.setSpacing(8)
         self._layout = layout
 
@@ -26,4 +27,4 @@ class SidebarActionRow(QWidget):
         self._layout.addStretch(1)
 
 
-__all__ = ["SidebarActionRow"]
+__all__ = ["SidebarToolbar"]

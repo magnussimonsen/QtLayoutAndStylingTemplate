@@ -284,6 +284,11 @@ QWidget[sidebarRole="toolbar"] QLabel {
     color: #111111;
 }
 
+QWidget[sidebarRole="content"] {
+    background-color: #F5FF66;
+    color: #111111;
+}
+
 QWidget[sidebarRole="action-row"] {
     background-color: #A70707;
     border-radius: 2px;
@@ -328,6 +333,7 @@ QDockWidget#SettingsDock QSpinBox:hover {
 QDockWidget#NotebooksDock QLabel,
 QDockWidget#SettingsDock QLabel {
     background-color: transparent;
+    color: #111111;
 }
 
 QStatusBar#MainStatusBar {
