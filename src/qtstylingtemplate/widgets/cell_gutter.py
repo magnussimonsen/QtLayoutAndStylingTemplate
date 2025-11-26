@@ -27,7 +27,7 @@ def get_qss(
         {GUTTER_SELECTOR} {{
             background-color: {bg.cell_gutter};
             border-right: {metrics.border_width}px solid {border.cell_gutter};
-            padding: 0 {metrics.padding_sm}px;
+            padding: 0 {metrics.padding_small}px;
             color: {text.muted};
         }}
 
@@ -45,7 +45,7 @@ def get_qss(
             min-width: 32px;
             qproperty-alignment: AlignRight | AlignVCenter;
             font-family: {metrics.font_family};
-            font-size: {metrics.font_size_sm}pt;
+            font-size: {metrics.font_size_small}pt;
         }}
         """
     ).strip()

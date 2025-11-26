@@ -38,8 +38,8 @@ def get_qss(
         {CELL_SELECTOR} {{
             background-color: {bg.cell};
             border: {metrics.border_width}px solid {border.cell};
-            border-radius: {metrics.radius_md}px;
-            padding: {metrics.padding_md}px;
+            border-radius: {metrics.radius_medium}px;
+            padding: {metrics.padding_medium}px;
         }}
 
         {CELL_SELECTOR}[state="focused"],
@@ -52,9 +52,9 @@ def get_qss(
     header = dedent(
         f"""
         {CELL_SELECTOR} > {CELL_HEADER_SELECTOR} {{
-            margin-bottom: {metrics.padding_sm}px;
+            margin-bottom: {metrics.padding_small}px;
             color: {text.secondary};
-            font-size: {metrics.font_size_sm}pt;
+            font-size: {metrics.font_size_small}pt;
             text-transform: uppercase;
             letter-spacing: 0.08em;
         }}
@@ -65,7 +65,7 @@ def get_qss(
         f"""
         {CELL_SELECTOR} > {CELL_BODY_SELECTOR} {{
             color: {text.primary};
-            font-size: {metrics.font_size_md}pt;
+            font-size: {metrics.font_size_medium}pt;
         }}
         """
     ).strip()

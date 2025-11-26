@@ -23,13 +23,13 @@ def _base_style(theme: Theme) -> str:
         background-color: {theme.bg.app};
         color: {theme.text.primary};
         font-family: {metrics.font_family};
-        font-size: {metrics.font_size_md}pt;
+        font-size: {metrics.font_size_medium}pt;
     }}
 
     QToolBar {{
         background-color: {theme.bg.toolbar};
-        spacing: {metrics.padding_sm}px;
-        padding: 0 {metrics.padding_sm}px;
+        spacing: {metrics.padding_small}px;
+        padding: 0 {metrics.padding_small}px;
     }}
     """.strip()
 

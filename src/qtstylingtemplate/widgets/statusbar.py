@@ -25,10 +25,10 @@ def get_qss(
             background-color: {palette.background};
             color: {palette.text};
             border-top: {metrics.border_width}px solid {palette.border_top};
-            padding: 0 {metrics.padding_md}px;
+            padding: 0 {metrics.padding_medium}px;
             min-height: {metrics.statusbar_height}px;
             font-family: {metrics.font_family};
-            font-size: {metrics.font_size_sm}pt;
+            font-size: {metrics.font_size_small}pt;
         }}
 
         {STATUSBAR_SELECTOR} QLabel {{

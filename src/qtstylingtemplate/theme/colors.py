@@ -32,7 +32,7 @@ class _BGTokens:
     dropdown = ModeAwareColor(light="#ffffff", dark="#333333")
     cell = ModeAwareColor(light="#ffffff", dark="#1f1f1f")
     cell_gutter = ModeAwareColor(light="#ededed", dark="#181818")
-    toolbar = ModeAwareColor(light="#ededed", dark="#2a2a2a")
+    toolbar = ModeAwareColor(light="#707070", dark="#2a2a2a")
 
 
 class _BorderTokens:

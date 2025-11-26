@@ -52,8 +52,20 @@ def _load_style_package():  # pragma: no cover - import helper
     return styling.apply_global_style, theme_mod.ThemeMode
 
 
+def _load_constants():  # pragma: no cover - import helper
+    try:
+        constants = import_module("qtstylingtemplate.constants")
+    except ModuleNotFoundError as exc:
+        raise SystemExit(
+            "Unable to import 'qtstylingtemplate.constants'. Ensure the repo's 'src' directory is on PYTHONPATH."
+        ) from exc
+
+    return constants.DEFAULT_THEME_MODE
+
+
 (QAction, QActionGroup, QApplication, QFrame, QHBoxLayout, QLabel, QMainWindow, QPushButton, QStatusBar, QToolBar, QVBoxLayout, QWidget, QEvent, Qt) = _load_qt_widgets()
 apply_global_style, ThemeMode = _load_style_package()
+DEFAULT_THEME_MODE = _load_constants()
 
 
 class CellRow(QWidget):
@@ -283,7 +295,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--mode",
         choices=[mode.value for mode in ThemeMode],
-        default=ThemeMode.DARK.value,
+        default=DEFAULT_THEME_MODE.value,
         help="Theme mode to use when applying the stylesheet",
     )
     return parser.parse_args()

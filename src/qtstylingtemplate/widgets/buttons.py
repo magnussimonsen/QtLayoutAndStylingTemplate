@@ -16,10 +16,10 @@ def _button_block(selector: str, palette, metrics: "Metrics") -> str:
             background-color: {palette.normal};
             color: {palette.text};
             border: {metrics.border_width}px solid {palette.border};
-            border-radius: {metrics.radius_md}px;
-            padding: {metrics.padding_sm}px {metrics.padding_md}px;
+            border-radius: {metrics.radius_medium}px;
+            padding: {metrics.padding_small}px {metrics.padding_medium}px;
             font-family: {metrics.font_family};
-            font-size: {metrics.font_size_md}pt;
+            font-size: {metrics.font_size_medium}pt;
         }}
 
         {selector}:hover {{
@@ -69,8 +69,8 @@ def get_qss(
     toolbar_overrides = dedent(
         f"""
         QPushButton[btnType="toolbar"] {{
-            border-radius: {metrics.radius_sm}px;
-            padding: {metrics.padding_xs}px {metrics.padding_sm}px;
+            border-radius: {metrics.radius_small}px;
+            padding: {metrics.padding_extra_small}px {metrics.padding_small}px;
             min-height: {metrics.toolbar_height - 10}px;
         }}
         """
