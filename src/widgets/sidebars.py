@@ -105,6 +105,7 @@ def get_qss(
             background-color: {bg.sidebar_content};
             border: {spacing.input_border_width}px solid {border.subtle};
             padding: {spacing.input_padding}px;
+            border-radius: 2px;
         }}
 
         QDockWidget#NotebooksDock QComboBox:hover,
@@ -112,6 +113,43 @@ def get_qss(
         QDockWidget#NotebooksDock QSpinBox:hover,
         QDockWidget#SettingsDock QSpinBox:hover {{
             border-color: {border.strong};
+        }}
+
+        QDockWidget#NotebooksDock QSpinBox::up-button,
+        QDockWidget#SettingsDock QSpinBox::up-button,
+        QDockWidget#NotebooksDock QSpinBox::down-button,
+        QDockWidget#SettingsDock QSpinBox::down-button {{
+            background-color: {border.subtle};
+            border: none;
+            width: 16px;
+            border-radius: 2px;
+        }}
+
+        QDockWidget#NotebooksDock QSpinBox::up-button:hover,
+        QDockWidget#SettingsDock QSpinBox::up-button:hover,
+        QDockWidget#NotebooksDock QSpinBox::down-button:hover,
+        QDockWidget#SettingsDock QSpinBox::down-button:hover {{
+            background-color: {border.strong};
+        }}
+
+        QDockWidget#NotebooksDock QSpinBox::up-arrow,
+        QDockWidget#SettingsDock QSpinBox::up-arrow {{
+            width: 0;
+            height: 0;
+            border-left: 3px solid transparent;
+            border-right: 3px solid transparent;
+            border-bottom: 4px solid {text.primary};
+            margin: 0px;
+        }}
+
+        QDockWidget#NotebooksDock QSpinBox::down-arrow,
+        QDockWidget#SettingsDock QSpinBox::down-arrow {{
+            width: 0;
+            height: 0;
+            border-left: 3px solid transparent;
+            border-right: 3px solid transparent;
+            border-top: 4px solid {text.primary};
+            margin: 0px;
         }}
 
         QDockWidget#NotebooksDock QLabel,

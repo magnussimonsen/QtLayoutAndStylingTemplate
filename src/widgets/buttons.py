@@ -93,6 +93,11 @@ def get_qss(
             /*font-size: PLACEHOLDER FOR REACTIVE FONTSIZE */
             /*font-family: PLACEHOLDER FOR REACTIVE FONTFAMILY */
         }}
+
+        QPushButton[btnType="menubar"]:checked {{
+            background-color: {palettes.menubar.pressed};
+            color: {palettes.menubar.text};
+        }}
         """
     ).strip()
 

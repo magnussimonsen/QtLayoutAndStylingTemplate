@@ -108,7 +108,7 @@ class _ButtonTokens:
     menubar = ButtonPaletteTokens(
         normal=ModeAwareColor(light="#f0f0f0", dark="#3a3a3a"),
         hover=ModeAwareColor(light="#e2e2e2", dark="#4a4a4a"),
-        pressed=ModeAwareColor(light="#d0d0d0", dark="#2b2b2b"),
+        pressed=ModeAwareColor(light="#4a90e2", dark="#5a9fff"),
         disabled=ModeAwareColor(light="#f8f8f8", dark="#1f1f1f"),
         border=ModeAwareColor(light="#bcbcbc", dark="#5a5a5a"),
         text=_TextTokens.primary,

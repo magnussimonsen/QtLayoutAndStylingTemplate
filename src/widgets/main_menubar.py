@@ -51,6 +51,10 @@ def get_qss(
         {MENUBAR_SELECTOR}:focus {{
             outline: none;
         }}
+
+        QWidget[widgetRole="menubar-corner"] {{
+            background-color: {menu_palette.background};
+        }}
         """
     ).strip()
     

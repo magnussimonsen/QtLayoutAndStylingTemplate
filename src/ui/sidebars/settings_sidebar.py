@@ -48,7 +48,7 @@ class SettingsSidebarWidget(QWidget):
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
-        main_layout.addWidget(self._build_toolbar())
+        #main_layout.addWidget(self._build_toolbar()) # Toolbar is not needed for settings sidepanel
         main_layout.addWidget(self._build_content_container())
 
     def _configure_font_spin(
@@ -76,17 +76,17 @@ class SettingsSidebarWidget(QWidget):
         self._ui_font_combo.setEnabled(bool(self._font_choices))
         self._ui_font_combo.currentTextChanged.connect(self.ui_font_family_changed)
 
-    def _build_toolbar(self) -> QWidget:
-        toolbar = QWidget(self)
-        toolbar.setProperty("sidebarRole", "toolbar")
-        toolbar.setAutoFillBackground(True)
-        toolbar_layout = QHBoxLayout(toolbar)
-        toolbar_layout.setContentsMargins(8, 8, 8, 8)
-        toolbar_layout.setSpacing(8)
-        toolbar_label = QLabel("Sidebar Settings", toolbar)
-        toolbar_layout.addWidget(toolbar_label)
-        toolbar_layout.addStretch()
-        return toolbar
+    #def _build_toolbar(self) -> QWidget:
+        #toolbar = QWidget(self)
+        #toolbar.setProperty("sidebarRole", "toolbar")
+        #toolbar.setAutoFillBackground(True)
+        #toolbar_layout = QHBoxLayout(toolbar)
+        #toolbar_layout.setContentsMargins(8, 8, 8, 8)
+        #toolbar_layout.setSpacing(8)
+        #toolbar_label = QLabel("Sidebar Settings", toolbar)
+        #toolbar_layout.addWidget(toolbar_label)
+        #toolbar_layout.addStretch()
+        #return toolbar
 
     def _build_content_container(self) -> QWidget:
         container = QWidget(self)

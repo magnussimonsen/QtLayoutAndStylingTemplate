@@ -81,11 +81,11 @@ QPushButton[btnType="menubar"]:hover {
 }
 
 QPushButton[btnType="menubar"]:pressed {
-    background-color: #d0d0d0;
+    background-color: #4a90e2;
 }
 
 QPushButton[btnType="menubar"]:checked {
-    background-color: #d0d0d0;
+    background-color: #4a90e2;
     border-color: #4a90e2;
 }
 
@@ -187,6 +187,11 @@ QPushButton[btnType="menubar"] {
     /*font-family: PLACEHOLDER FOR REACTIVE FONTFAMILY */
 }
 
+QPushButton[btnType="menubar"]:checked {
+    background-color: #4a90e2;
+    color: #111111;
+}
+
 QPushButton {
     outline: none;
 }
@@ -283,6 +288,10 @@ QMenuBar#MainMenuBar:focus {
     outline: none;
 }
 
+QWidget[widgetRole="menubar-corner"] {
+    background-color: #b20e0e;
+}
+
 QMenu[menuRole="primary"] {   
     background-color: #0138ff;
     border: 0px solid #8a0d0d;
@@ -376,6 +385,7 @@ QDockWidget#SettingsDock QSpinBox {
     background-color: #F5FF66;
     border: 1px solid #8a0d0d;
     padding: 4px;
+    border-radius: 2px;
 }
 
 QDockWidget#NotebooksDock QComboBox:hover,
@@ -383,6 +393,43 @@ QDockWidget#SettingsDock QComboBox:hover,
 QDockWidget#NotebooksDock QSpinBox:hover,
 QDockWidget#SettingsDock QSpinBox:hover {
     border-color: #bcbcbc;
+}
+
+QDockWidget#NotebooksDock QSpinBox::up-button,
+QDockWidget#SettingsDock QSpinBox::up-button,
+QDockWidget#NotebooksDock QSpinBox::down-button,
+QDockWidget#SettingsDock QSpinBox::down-button {
+    background-color: #8a0d0d;
+    border: none;
+    width: 16px;
+    border-radius: 2px;
+}
+
+QDockWidget#NotebooksDock QSpinBox::up-button:hover,
+QDockWidget#SettingsDock QSpinBox::up-button:hover,
+QDockWidget#NotebooksDock QSpinBox::down-button:hover,
+QDockWidget#SettingsDock QSpinBox::down-button:hover {
+    background-color: #bcbcbc;
+}
+
+QDockWidget#NotebooksDock QSpinBox::up-arrow,
+QDockWidget#SettingsDock QSpinBox::up-arrow {
+    width: 0;
+    height: 0;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-bottom: 4px solid #111111;
+    margin: 0px;
+}
+
+QDockWidget#NotebooksDock QSpinBox::down-arrow,
+QDockWidget#SettingsDock QSpinBox::down-arrow {
+    width: 0;
+    height: 0;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-top: 4px solid #111111;
+    margin: 0px;
 }
 
 QDockWidget#NotebooksDock QLabel,

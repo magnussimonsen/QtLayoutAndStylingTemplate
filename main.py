@@ -230,6 +230,8 @@ class LunaQtWindow(QMainWindow):
         self._settings_dock: QDockWidgetType | None = None
         self._notebooks_button: QPushButtonType | None = None
         self._settings_button: QPushButtonType | None = None
+        self._move_up_button: QPushButtonType | None = None
+        self._move_down_button: QPushButtonType | None = None
 
         self.setWindowTitle("LunaQt2")
         self.resize(900, 600)
@@ -251,6 +253,14 @@ class LunaQtWindow(QMainWindow):
         file_menu.addAction("Save")
         file_menu.addAction("Save As…")
 
+        edit_menu = menu_bar.addMenu("Edit")
+        edit_menu.setProperty("menuRole", "primary")
+        edit_menu.addAction("Move Cell Up")
+        edit_menu.addAction("Move Cell Down")
+        edit_menu.addSeparator()
+        edit_menu.addAction("Delete Cell")
+        edit_menu.addAction("Delete Notebook")
+
         view_menu = menu_bar.addMenu("View")
         view_menu.setProperty("menuRole", "primary")
 
@@ -265,26 +275,48 @@ class LunaQtWindow(QMainWindow):
         # Ensure the action that matches the current theme is checked.
         self._theme_actions[self._mode.value].setChecked(True)
 
+        self._install_cell_action_buttons(menu_bar)
         self._install_sidebar_corner_buttons(menu_bar)
+
+    def _install_cell_action_buttons(self, menu_bar) -> None:
+        """Store button references to be added to corner widget."""
+        move_up_btn = QPushButton("Move cell up ↑")
+        move_up_btn.setProperty("btnType", "menubar")
+        move_up_btn.setToolTip("Move Cell Up")
+        #move_up_btn.setFixedWidth(32)
+        move_up_btn.clicked.connect(self._on_move_cell_up_clicked)
+        
+        move_down_btn = QPushButton("Move cell down ↓")
+        move_down_btn.setProperty("btnType", "menubar")
+        move_down_btn.setToolTip("Move Cell Down")
+        #move_down_btn.setFixedWidth(32)
+        move_down_btn.clicked.connect(self._on_move_cell_down_clicked)
+        
+        self._move_up_button = move_up_btn
+        self._move_down_button = move_down_btn
 
     def _install_sidebar_corner_buttons(self, menu_bar) -> None: # The buttons Settings, Notebooks and so on
         corner = QWidget(menu_bar)
-        #corner.setFixedHeight(32)
-        corner.setStyleSheet("background: transparent;")
+        corner.setProperty("widgetRole", "menubar-corner")
         layout = QHBoxLayout(corner)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(10)
 
+        # Add cell action buttons first
+        if hasattr(self, '_move_up_button') and hasattr(self, '_move_down_button'):
+            layout.addWidget(self._move_up_button)
+            layout.addWidget(self._move_down_button)
+
         notebooks_button = QPushButton("Notebooks", corner)
         notebooks_button.setCheckable(True)
         notebooks_button.setProperty("btnType", "menubar")
-        notebooks_button.toggled.connect(self._toggle_notebooks_sidebar)
+        notebooks_button.toggled.connect(lambda checked: (self._toggle_notebooks_sidebar(checked), self._refresh_button_style(notebooks_button)))
         layout.addWidget(notebooks_button)
 
         settings_button = QPushButton("Settings", corner)
         settings_button.setCheckable(True)
         settings_button.setProperty("btnType", "menubar")
-        settings_button.toggled.connect(self._toggle_settings_sidebar)
+        settings_button.toggled.connect(lambda checked: (self._toggle_settings_sidebar(checked), self._refresh_button_style(settings_button)))
         layout.addWidget(settings_button)
 
         layout.addStretch(1)
@@ -415,6 +447,12 @@ class LunaQtWindow(QMainWindow):
         except Exception:
             pass
 
+    def _refresh_button_style(self, button: QPushButtonType) -> None:
+        """Force Qt to reapply button styling after state change."""
+        button.style().unpolish(button)
+        button.style().polish(button)
+        button.update()
+
     def _toggle_notebooks_sidebar(self, checked: bool) -> None:
         if not self._notebooks_dock:
             return
@@ -481,6 +519,14 @@ class LunaQtWindow(QMainWindow):
             ui_font_family=normalized_family,
         )
         self._apply_current_style()
+
+    def _on_move_cell_up_clicked(self) -> None:
+        """Placeholder: Move the selected cell up in the list."""
+        pass  # TODO: Implement cell reordering logic
+
+    def _on_move_cell_down_clicked(self) -> None:
+        """Placeholder: Move the selected cell down in the list."""
+        pass  # TODO: Implement cell reordering logic
 
 
 def parse_args() -> argparse.Namespace:
