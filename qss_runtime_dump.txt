@@ -169,16 +169,22 @@ QPushButton[btnType="warning"]:focus-visible {
 }
 
 QPushButton[btnType="toolbar"] {
+    border: none;
     border-radius: 2px;
     padding: 2px 4px;
     min-height: 5px;
+     /*font-size: PLACEHOLDER FOR REACTIVE FONTSIZE */
+    /*font-family: PLACEHOLDER FOR REACTIVE FONTFAMILY */
 }
 
 QPushButton[btnType="menubar"] {
+    border: none;
     border-radius: 0px;
     padding: 4px 6px;
     margin-top: 0px;
     margin-bottom: 0px;
+    /*font-size: PLACEHOLDER FOR REACTIVE FONTSIZE */
+    /*font-family: PLACEHOLDER FOR REACTIVE FONTFAMILY */
 }
 
 QPushButton {
@@ -205,7 +211,7 @@ QFrame[cellType="container"] > QWidget[cellPart="header"] {
     background-color: #b5b5b5;
     margin-bottom: 4px;
     color: #333333;
-    font-size: 11pt;
+    font-size: 10pt;
     text-transform: uppercase;
     letter-spacing: 0.08em;
 }
@@ -245,7 +251,7 @@ QWidget[cellType="gutter"] > QLabel[cellRole="line-number"] {
     min-width: 32px;
     qproperty-alignment: 'AlignRight | AlignVCenter';
     font-family: Segoe UI, 'Noto Sans', sans-serif;
-    font-size: 11pt;
+    font-size: 10pt;
 }
 
 QMenuBar#MainMenuBar {
@@ -392,7 +398,7 @@ QStatusBar#MainStatusBar {
     padding: 0 6px;
     min-height: 32px;
     font-family: Segoe UI, 'Noto Sans', sans-serif;
-    font-size: 11pt;
+    font-size: 10pt;
 }
 
 QStatusBar#MainStatusBar QLabel {

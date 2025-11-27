@@ -288,10 +288,10 @@ def _resolve_statusbar(mode: ThemeMode) -> StatusBarPalette:
     )
 
 
-def get_theme(mode: ThemeMode = ThemeMode.DARK) -> Theme:
+def get_theme(mode: ThemeMode = ThemeMode.DARK, metrics: Metrics | None = None) -> Theme:
     """Return a fully resolved palette for the requested theme mode."""
 
-    metrics = Metrics()
+    metrics = metrics or Metrics()
     return Theme(
         mode=mode,
         bg=_resolve_bg(mode),

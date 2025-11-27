@@ -8,7 +8,7 @@ from theme import ButtonTokens, Theme, ThemeMode, button_tokens as get_button_to
 from utils.hex_to_rgba import hex_to_rgba
 
 
-def _button_block(selector: str, palette, metrics, tokens: ButtonTokens) -> str:
+def _button_block(selector: str, palette, metrics, button_tokens: ButtonTokens) -> str:
     """Return a QSS block for a single button selector."""
 
     return dedent(
@@ -16,9 +16,9 @@ def _button_block(selector: str, palette, metrics, tokens: ButtonTokens) -> str:
         {selector} {{
             background-color: {palette.normal};
             color: {palette.text};
-            border: {tokens.border_width}px solid {palette.border};
-            border-radius: {tokens.radius}px;
-            padding: {tokens.padding_y}px {tokens.padding_x}px;
+            border: {button_tokens.border_width}px solid {palette.border};
+            border-radius: {button_tokens.radius}px;
+            padding: {button_tokens.padding_y}px {button_tokens.padding_x}px;
             font-family: {metrics.font_family};
             font-size: {metrics.font_size_medium}pt;
         }}
@@ -72,9 +72,12 @@ def get_qss(
     toolbar_overrides = dedent(
         f"""
         QPushButton[btnType="toolbar"] {{
+            border: none;
             border-radius: {button_tokens.toolbar_radius}px;
             padding: {button_tokens.toolbar_padding_y}px {button_tokens.toolbar_padding_x}px;
             min-height: {button_tokens.toolbar_min_height}px;
+             /*font-size: PLACEHOLDER FOR REACTIVE FONTSIZE */
+            /*font-family: PLACEHOLDER FOR REACTIVE FONTFAMILY */
         }}
         """
     ).strip()
@@ -82,10 +85,13 @@ def get_qss(
     menubar_overrides = dedent(
         f"""
         QPushButton[btnType="menubar"] {{
+            border: none;
             border-radius: {button_tokens.menubar_radius}px;
             padding: {button_tokens.menubar_padding_y}px {button_tokens.menubar_padding_x}px;
             margin-top: 0px;
             margin-bottom: 0px;
+            /*font-size: PLACEHOLDER FOR REACTIVE FONTSIZE */
+            /*font-family: PLACEHOLDER FOR REACTIVE FONTFAMILY */
         }}
         """
     ).strip()

@@ -1,4 +1,4 @@
-"""Quick demo entry-point to preview the styling system."""
+"""Entry-point."""
 
 from __future__ import annotations
 
@@ -16,6 +16,7 @@ if SRC_DIR.exists() and str(SRC_DIR) not in sys.path:
 
 from src.ui import NotebookSidebarWidget, SettingsSidebarWidget
 from PySide6.QtCore import qInstallMessageHandler
+from theme.metrics import Metrics, build_metrics_for_ui_font
 
 
 def qt_handler(mode, context, message):  # pragma: no cover - debug helper
@@ -27,7 +28,7 @@ def _load_qt_widgets():  # pragma: no cover - import helper
         gui = import_module("PySide6.QtGui")
         core = import_module("PySide6.QtCore")
     except ModuleNotFoundError as exc:
-        raise SystemExit("PySide6 must be installed to run the demo window.") from exc
+        raise SystemExit("PySide6 must be installed to run LunaQt2.") from exc
 
     return (
         gui.QAction,
@@ -98,6 +99,11 @@ DEFAULT_THEME_MODE = constants_mod.DEFAULT_THEME_MODE
 DEFAULT_SIDEBAR_WIDTH = constants_mod.DEFAULT_SIDEBAR_WIDTH
 MIN_SIDEBAR_WIDTH = constants_mod.MIN_SIDEBAR_WIDTH
 MAX_SIDEBAR_WIDTH = constants_mod.MAX_SIDEBAR_WIDTH
+DEFAULT_UI_FONT_POINT_SIZE = constants_mod.DEFAULT_UI_FONT_POINT_SIZE
+MIN_UI_FONT_POINT_SIZE = constants_mod.MIN_UI_FONT_POINT_SIZE
+MAX_UI_FONT_POINT_SIZE = constants_mod.MAX_UI_FONT_POINT_SIZE
+UI_FONT_SIZE_STEP = constants_mod.FONT_SIZE_STEP
+clamp_ui_font_point_size = constants_mod.clamp_ui_font_point_size
 
 
 class CellRow(QWidget):
@@ -187,10 +193,11 @@ class CellRow(QWidget):
 class DemoWindow(QMainWindow):
     """Minimal window that lights up the different style modules."""
 
-    def __init__(self, app: Any, mode) -> None:
+    def __init__(self, app: Any, mode, ui_font_point_size: int = DEFAULT_UI_FONT_POINT_SIZE) -> None:
         super().__init__()
         self._app = app
         self._mode = mode
+        self._ui_font_point_size = clamp_ui_font_point_size(ui_font_point_size)
         self._theme_group = QActionGroup(self)
         self._theme_group.setExclusive(True)
         self._theme_actions: dict[str, Any] = {}
@@ -202,7 +209,7 @@ class DemoWindow(QMainWindow):
         self._notebooks_button: QPushButtonType | None = None
         self._settings_button: QPushButtonType | None = None
 
-        self.setWindowTitle("Qt Styling Template Demo")
+        self.setWindowTitle("LunaQt2")
         self.resize(900, 600)
 
         self._build_menubar()
@@ -210,6 +217,7 @@ class DemoWindow(QMainWindow):
         self._build_central()
         self._build_statusbar()
         self._build_sidebars()
+        self._apply_current_style()
 
     def _build_menubar(self) -> None:
         menu_bar = self.menuBar()
@@ -240,9 +248,10 @@ class DemoWindow(QMainWindow):
     def _install_sidebar_corner_buttons(self, menu_bar) -> None: # The buttons Settings, Notebooks and so on
         corner = QWidget(menu_bar)
         #corner.setFixedHeight(32)
+        corner.setStyleSheet("background: transparent;")
         layout = QHBoxLayout(corner)
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(0)
+        layout.setSpacing(10)
 
         notebooks_button = QPushButton("Notebooks", corner)
         notebooks_button.setCheckable(True)
@@ -345,7 +354,14 @@ class DemoWindow(QMainWindow):
         notebooks_dock.hide()
 
         settings_dock = self._create_sidebar_dock("SettingsDock", "Settings")
-        settings_panel = SettingsSidebarWidget(self)
+        settings_panel = SettingsSidebarWidget(
+            self,
+            ui_font_size=self._ui_font_point_size,
+            min_font_size=MIN_UI_FONT_POINT_SIZE,
+            max_font_size=MAX_UI_FONT_POINT_SIZE,
+            step=UI_FONT_SIZE_STEP,
+        )
+        settings_panel.ui_font_size_changed.connect(self._handle_ui_font_size_changed)
         settings_dock.setWidget(settings_panel)
         settings_dock.hide()
 
@@ -398,15 +414,19 @@ class DemoWindow(QMainWindow):
         else:
             self._settings_dock.hide()
 
+    def _current_metrics(self) -> Metrics:
+        return build_metrics_for_ui_font(self._ui_font_point_size)
 
+    def _apply_current_style(self) -> None:
+        apply_global_style(self._app, mode=self._mode, metrics=self._current_metrics())
+        for row in self._cell_rows:
+            row.set_selected(row.is_selected())
 
     def _switch_theme(self, mode) -> None:
         if mode == self._mode:
             return
         self._mode = mode
-        apply_global_style(self._app, mode=mode)
-        for row in self._cell_rows:
-            row.set_selected(row.is_selected())
+        self._apply_current_style()
 
     def _handle_cell_selected(self, row: CellRow) -> None:
         for candidate in self._cell_rows:
@@ -418,9 +438,16 @@ class DemoWindow(QMainWindow):
         else:
             self._handle_cell_selected(row)
 
+    def _handle_ui_font_size_changed(self, point_size: int) -> None:
+        clamped_size = clamp_ui_font_point_size(point_size)
+        if clamped_size == self._ui_font_point_size:
+            return
+        self._ui_font_point_size = clamped_size
+        self._apply_current_style()
+
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run the Qt styling demo window")
+    parser = argparse.ArgumentParser(description="Run the LunaQt2 window")
     parser.add_argument(
         "--mode",
         choices=[mode.value for mode in ThemeMode],
@@ -433,6 +460,8 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     mode = ThemeMode(args.mode)
+    ui_font_point_size = DEFAULT_UI_FONT_POINT_SIZE
+    initial_metrics = build_metrics_for_ui_font(ui_font_point_size)
 
     app = QApplication(sys.argv)
     qInstallMessageHandler(qt_handler)
@@ -440,15 +469,15 @@ def main() -> None:
     try:
         from style_loader import build_application_qss  # type: ignore
 
-        qss_dump = build_application_qss(mode=mode)
+        qss_dump = build_application_qss(mode=mode, metrics=initial_metrics)
         with open("qss_runtime_dump.txt", "w", encoding="utf-8") as f:
             f.write(qss_dump)
     except Exception as e:  # pragma: no cover - debug only
         print("Error while dumping runtime QSS:", e)
 
-    apply_global_style(app, mode=mode)
+    apply_global_style(app, mode=mode, metrics=initial_metrics)
 
-    window = DemoWindow(app, mode)
+    window = DemoWindow(app, mode, ui_font_point_size=ui_font_point_size)
     window.show()
 
     sys.exit(app.exec())

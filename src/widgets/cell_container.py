@@ -68,7 +68,7 @@ def get_qss(
         {CELL_SELECTOR} > {CELL_BODY_SELECTOR} {{
             background-color: {bg.cell};
             color: {text.primary};
-            font-size: {metrics.font_size_medium}pt;
+            font-size: {metrics.cell_body_font_size}pt;
         }}
         """
     ).strip()

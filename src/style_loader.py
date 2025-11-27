@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Iterable, Protocol
 
-from theme import Theme, ThemeMode, get_theme
+from theme import Metrics, Theme, ThemeMode, get_theme
 from widgets import buttons, cell_container, cell_gutter, main_menubar, statusbar
 from widgets import sidebars
 
@@ -71,10 +71,12 @@ def _collect_qss(modules: Iterable, theme: Theme) -> str:
 def build_application_qss(
     mode: ThemeMode = ThemeMode.DARK,
     theme: Theme | None = None,
+    *,
+    metrics: Metrics | None = None,
 ) -> str:
     """Expose concatenated QSS string for use in tests or debugging."""
 
-    theme = theme or get_theme(mode)
+    theme = theme or get_theme(mode, metrics=metrics)
     return _collect_qss(STYLE_MODULES, theme)
 
 
@@ -83,10 +85,15 @@ class _HasStyleSheet(Protocol):
         ...
 
 
-def apply_global_style(app: _HasStyleSheet, mode: ThemeMode = ThemeMode.DARK) -> None:
+def apply_global_style(
+    app: _HasStyleSheet,
+    mode: ThemeMode = ThemeMode.DARK,
+    *,
+    metrics: Metrics | None = None,
+) -> None:
     """Apply the assembled QSS onto the provided QApplication instance."""
 
-    app.setStyleSheet(build_application_qss(mode=mode))
+    app.setStyleSheet(build_application_qss(mode=mode, metrics=metrics))
 
 
 __all__ = ["build_application_qss", "apply_global_style"]

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 
 @dataclass(frozen=True)
@@ -39,6 +39,7 @@ class Metrics:
     font_size_small: int = 11
     font_size_medium: int = 12
     font_size_large: int = 14
+    cell_body_font_size: int = 12
 
     border_width: int = 1 # DEPRECATED
     border_width_zero: int = 0
@@ -47,4 +48,29 @@ class Metrics:
     border_width_large: int = 4
 
 
-__all__ = ["Metrics"]
+def build_metrics_for_ui_font(
+    ui_point_size: int,
+    *,
+    template: "Metrics" | None = None,
+    small_offset: int = 2,
+    large_offset: int = 2,
+) -> "Metrics":
+    """Return a Metrics instance adjusted to the requested UI font size.
+
+    The helper keeps the provided template immutable by returning a new instance
+    with updated small/medium/large font sizes while leaving the dedicated cell
+    body size untouched.
+    """
+
+    base = template or Metrics()
+    adjusted_small = max(ui_point_size - small_offset, 6)
+    adjusted_large = ui_point_size + large_offset
+    return replace(
+        base,
+        font_size_small=adjusted_small,
+        font_size_medium=ui_point_size,
+        font_size_large=adjusted_large,
+    )
+
+
+__all__ = ["Metrics", "build_metrics_for_ui_font"]
