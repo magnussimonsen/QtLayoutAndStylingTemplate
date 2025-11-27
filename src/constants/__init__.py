@@ -8,6 +8,7 @@ from .typography import (
 	MIN_UI_FONT_POINT_SIZE,
 	clamp_ui_font_point_size,
 )
+from assets.fonts.font_lists import BUNDLED_FONTS, DEFAULT_UI_FONT
 from theme.metrics import Metrics
 
 # Re-export sidebar constants from Metrics for backwards compatibility
@@ -26,4 +27,6 @@ __all__ = [
 	"MAX_UI_FONT_POINT_SIZE",
 	"FONT_SIZE_STEP",
 	"clamp_ui_font_point_size",
+	"BUNDLED_FONTS",
+	"DEFAULT_UI_FONT",
 ]

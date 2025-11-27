@@ -1,7 +1,7 @@
 QWidget {
         background-color: #00950a;
         color: #111111;
-        font-family: Segoe UI, 'Noto Sans', sans-serif;
+        font-family: Inter;
         font-size: 12pt;
     }
 
@@ -38,7 +38,7 @@ QPushButton[btnType="primary"] {
     border: 1px solid #bcbcbc;
     border-radius: 4px;
     padding: 4px 6px;
-    font-family: Segoe UI, 'Noto Sans', sans-serif;
+    font-family: Inter;
     font-size: 12pt;
 }
 
@@ -72,7 +72,7 @@ QPushButton[btnType="menubar"] {
     border: 1px solid #bcbcbc;
     border-radius: 4px;
     padding: 4px 6px;
-    font-family: Segoe UI, 'Noto Sans', sans-serif;
+    font-family: Inter;
     font-size: 12pt;
 }
 
@@ -106,7 +106,7 @@ QPushButton[btnType="toolbar"] {
     border: 1px solid #dadada;
     border-radius: 4px;
     padding: 4px 6px;
-    font-family: Segoe UI, 'Noto Sans', sans-serif;
+    font-family: Inter;
     font-size: 12pt;
 }
 
@@ -140,7 +140,7 @@ QPushButton[btnType="warning"] {
     border: 1px solid #f2a25d;
     border-radius: 4px;
     padding: 4px 6px;
-    font-family: Segoe UI, 'Noto Sans', sans-serif;
+    font-family: Inter;
     font-size: 12pt;
 }
 
@@ -250,7 +250,7 @@ QWidget[cellType="gutter"] > QLabel[cellRole="line-number"] {
     color: #333333;
     min-width: 32px;
     qproperty-alignment: 'AlignRight | AlignVCenter';
-    font-family: Segoe UI, 'Noto Sans', sans-serif;
+    font-family: Inter;
     font-size: 10pt;
 }
 
@@ -265,7 +265,7 @@ QMenuBar#MainMenuBar {
     border-top: 0px solid #00950a;
     border-top: none; 
     min-height: 5px;
-    font-family: Segoe UI, 'Noto Sans', sans-serif; /* THIS SHALL NOT COME FROM METRICS */
+    font-family: Inter; /* THIS SHALL NOT COME FROM METRICS */
     font-size: 12pt; /* THIS SHALL NOT COME FROM METRICS */
 }
 
@@ -397,7 +397,7 @@ QStatusBar#MainStatusBar {
     border-top: 1px solid #8a0d0d;
     padding: 0 6px;
     min-height: 32px;
-    font-family: Segoe UI, 'Noto Sans', sans-serif;
+    font-family: Inter;
     font-size: 10pt;
 }
 

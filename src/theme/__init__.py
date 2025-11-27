@@ -14,6 +14,7 @@ from .colors import (
     get_theme,
 )
 from .metrics import Metrics
+from .preferences import StylePreferences
 from .mode import ThemeMode
 from .widget_tokens import (
     ButtonTokens,
@@ -56,4 +57,5 @@ __all__ = [
     "menubar_tokens",
     "sidebar_tokens",
     "statusbar_tokens",
+    "StylePreferences",
 ]

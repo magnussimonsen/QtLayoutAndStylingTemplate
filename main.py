@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import argparse
 import sys
+from dataclasses import replace
 from importlib import import_module
 from pathlib import Path
-from typing import Any, TYPE_CHECKING
+from typing import Any, Sequence
 
 # Ensure the local "src" directory is importable when running from the repo root.
 PROJECT_ROOT = Path(__file__).resolve().parent
@@ -16,7 +17,9 @@ if SRC_DIR.exists() and str(SRC_DIR) not in sys.path:
 
 from src.ui import NotebookSidebarWidget, SettingsSidebarWidget
 from PySide6.QtCore import qInstallMessageHandler
-from theme.metrics import Metrics, build_metrics_for_ui_font
+from theme.metrics import Metrics
+from theme.preferences import StylePreferences
+from utils.font_loader import load_bundled_fonts
 
 
 def qt_handler(mode, context, message):  # pragma: no cover - debug helper
@@ -104,6 +107,9 @@ MIN_UI_FONT_POINT_SIZE = constants_mod.MIN_UI_FONT_POINT_SIZE
 MAX_UI_FONT_POINT_SIZE = constants_mod.MAX_UI_FONT_POINT_SIZE
 UI_FONT_SIZE_STEP = constants_mod.FONT_SIZE_STEP
 clamp_ui_font_point_size = constants_mod.clamp_ui_font_point_size
+AVAILABLE_UI_FONT_FAMILIES: Sequence[str] = tuple(constants_mod.BUNDLED_FONTS)
+if not AVAILABLE_UI_FONT_FAMILIES:
+    raise SystemExit("No bundled UI fonts configured. Add entries to assets.fonts.font_lists.BUNDLED_FONTS.")
 
 
 class CellRow(QWidget):
@@ -123,7 +129,7 @@ class CellRow(QWidget):
         self._selected = False
 
         row_layout = QHBoxLayout(self)
-        row_layout.setContentsMargins(0, 0, 0, 0) # Margin between cells Left Top Right Bottom
+        row_layout.setContentsMargins(0, 0, 0, 0)  # Margin between cells Left Top Right Bottom
         row_layout.setSpacing(5)
 
         self._gutter = QWidget()
@@ -142,9 +148,9 @@ class CellRow(QWidget):
         self._cell_frame = QFrame()
         self._cell_frame.setProperty("cellType", "container")
         cell_layout = QVBoxLayout(self._cell_frame)
-        cell_layout.setContentsMargins(0, 0, 0, 0) # Cell content margins Left Top Right Bottom
+        cell_layout.setContentsMargins(0, 0, 0, 0)  # Cell content margins Left Top Right Bottom
         cell_layout.setSpacing(5)
-    
+
         header = QLabel(header_text)
         header.setProperty("cellPart", "header")
         header.setAttribute(Qt.WA_TransparentForMouseEvents, True)
@@ -193,11 +199,27 @@ class CellRow(QWidget):
 class DemoWindow(QMainWindow):
     """Minimal window that lights up the different style modules."""
 
-    def __init__(self, app: Any, mode, ui_font_point_size: int = DEFAULT_UI_FONT_POINT_SIZE) -> None:
+    def __init__(
+        self,
+        app: Any,
+        mode,
+        *,
+        ui_font_choices: Sequence[str],
+        style_preferences: StylePreferences | None = None,
+    ) -> None:
         super().__init__()
         self._app = app
         self._mode = mode
-        self._ui_font_point_size = clamp_ui_font_point_size(ui_font_point_size)
+        self._available_ui_fonts = list(ui_font_choices)
+        if not self._available_ui_fonts:
+            raise ValueError("At least one UI font choice must be provided.")
+        base_preferences = style_preferences or StylePreferences()
+        normalized_size = clamp_ui_font_point_size(base_preferences.ui_font_size)
+        if base_preferences.ui_font_size != normalized_size:
+            base_preferences = replace(base_preferences, ui_font_size=normalized_size)
+        if base_preferences.ui_font_family not in self._available_ui_fonts:
+            base_preferences = replace(base_preferences, ui_font_family=self._available_ui_fonts[0])
+        self._style_preferences = base_preferences
         self._theme_group = QActionGroup(self)
         self._theme_group.setExclusive(True)
         self._theme_actions: dict[str, Any] = {}
@@ -275,8 +297,6 @@ class DemoWindow(QMainWindow):
         toolbar = QToolBar("Main Toolbar")
         toolbar.setObjectName("PrimaryToolBar")
         toolbar.setMovable(False)
-        layout = QHBoxLayout(toolbar)
-        layout.setContentsMargins(0, 0, 0, 0)
         primary_btn = QPushButton("Primary")
         primary_btn.setProperty("btnType", "primary")
 
@@ -356,12 +376,15 @@ class DemoWindow(QMainWindow):
         settings_dock = self._create_sidebar_dock("SettingsDock", "Settings")
         settings_panel = SettingsSidebarWidget(
             self,
-            ui_font_size=self._ui_font_point_size,
+            ui_font_size=self._style_preferences.ui_font_size,
+            ui_font_family=self._style_preferences.ui_font_family,
+            ui_font_choices=list(self._available_ui_fonts),
             min_font_size=MIN_UI_FONT_POINT_SIZE,
             max_font_size=MAX_UI_FONT_POINT_SIZE,
             step=UI_FONT_SIZE_STEP,
         )
         settings_panel.ui_font_size_changed.connect(self._handle_ui_font_size_changed)
+        settings_panel.ui_font_family_changed.connect(self._handle_ui_font_family_changed)
         settings_dock.setWidget(settings_panel)
         settings_dock.hide()
 
@@ -415,7 +438,7 @@ class DemoWindow(QMainWindow):
             self._settings_dock.hide()
 
     def _current_metrics(self) -> Metrics:
-        return build_metrics_for_ui_font(self._ui_font_point_size)
+        return self._style_preferences.build_metrics()
 
     def _apply_current_style(self) -> None:
         apply_global_style(self._app, mode=self._mode, metrics=self._current_metrics())
@@ -440,9 +463,23 @@ class DemoWindow(QMainWindow):
 
     def _handle_ui_font_size_changed(self, point_size: int) -> None:
         clamped_size = clamp_ui_font_point_size(point_size)
-        if clamped_size == self._ui_font_point_size:
+        if clamped_size == self._style_preferences.ui_font_size:
             return
-        self._ui_font_point_size = clamped_size
+        self._style_preferences = replace(self._style_preferences, ui_font_size=clamped_size)
+        self._apply_current_style()
+
+    def _handle_ui_font_family_changed(self, font_family: str) -> None:
+        normalized_family = font_family.strip()
+        if not normalized_family:
+            return
+        if normalized_family not in self._available_ui_fonts:
+            return
+        if normalized_family == self._style_preferences.ui_font_family:
+            return
+        self._style_preferences = replace(
+            self._style_preferences,
+            ui_font_family=normalized_family,
+        )
         self._apply_current_style()
 
 
@@ -460,10 +497,16 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     mode = ThemeMode(args.mode)
-    ui_font_point_size = DEFAULT_UI_FONT_POINT_SIZE
-    initial_metrics = build_metrics_for_ui_font(ui_font_point_size)
+    ui_font_point_size = clamp_ui_font_point_size(DEFAULT_UI_FONT_POINT_SIZE)
+    default_ui_family = AVAILABLE_UI_FONT_FAMILIES[0]
+    style_preferences = StylePreferences(
+        ui_font_size=ui_font_point_size,
+        ui_font_family=default_ui_family,
+    )
+    initial_metrics = style_preferences.build_metrics()
 
     app = QApplication(sys.argv)
+    load_bundled_fonts()
     qInstallMessageHandler(qt_handler)
     # Debug: dump the exact stylesheet string Qt will parse
     try:
@@ -477,7 +520,12 @@ def main() -> None:
 
     apply_global_style(app, mode=mode, metrics=initial_metrics)
 
-    window = DemoWindow(app, mode, ui_font_point_size=ui_font_point_size)
+    window = DemoWindow(
+        app,
+        mode,
+        ui_font_choices=AVAILABLE_UI_FONT_FAMILIES,
+        style_preferences=style_preferences,
+    )
     window.show()
 
     sys.exit(app.exec())

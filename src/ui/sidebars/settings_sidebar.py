@@ -1,10 +1,13 @@
-"""Placeholder settings sidebar used by the demo UI."""
+"""Settings sidebar focused on typography controls."""
 
 from __future__ import annotations
+
+from typing import Sequence
 
 try:  # pragma: no cover - only imported when Qt is available
     from PySide6.QtCore import Signal
     from PySide6.QtWidgets import (
+        QComboBox,
         QFormLayout,
         QHBoxLayout,
         QLabel,
@@ -16,15 +19,18 @@ except ModuleNotFoundError as exc:  # pragma: no cover - runtime guard
     raise SystemExit("PySide6 must be installed to use the sidebar widgets.") from exc
 
 class SettingsSidebarWidget(QWidget):
-    """Lightweight form with font/precision controls."""
+    """Lightweight form with reactive typography controls."""
 
     ui_font_size_changed = Signal(int)
+    ui_font_family_changed = Signal(str)
 
     def __init__(
         self,
         parent: QWidget | None = None,
         *,
         ui_font_size: int,
+        ui_font_family: str,
+        ui_font_choices: Sequence[str],
         min_font_size: int,
         max_font_size: int,
         step: int = 1,
@@ -33,7 +39,10 @@ class SettingsSidebarWidget(QWidget):
         self.setObjectName("SettingsSidebarPanel")
         self.setAutoFillBackground(True)
 
+        self._font_choices = list(ui_font_choices)
+        self._ui_font_combo = QComboBox(self)
         self._ui_font_spin = QSpinBox(self)
+        self._configure_font_combo(ui_font_family)
         self._configure_font_spin(ui_font_size, min_font_size, max_font_size, step)
 
         main_layout = QVBoxLayout(self)
@@ -53,6 +62,19 @@ class SettingsSidebarWidget(QWidget):
         self._ui_font_spin.setSingleStep(max(1, step))
         self._ui_font_spin.setValue(value)
         self._ui_font_spin.valueChanged.connect(self.ui_font_size_changed)
+
+    def _configure_font_combo(self, family: str) -> None:
+        self._ui_font_combo.clear()
+        for entry in self._font_choices:
+            self._ui_font_combo.addItem(entry)
+
+        try:
+            index = self._font_choices.index(family)
+        except ValueError:
+            index = 0
+        self._ui_font_combo.setCurrentIndex(index)
+        self._ui_font_combo.setEnabled(bool(self._font_choices))
+        self._ui_font_combo.currentTextChanged.connect(self.ui_font_family_changed)
 
     def _build_toolbar(self) -> QWidget:
         toolbar = QWidget(self)
@@ -81,6 +103,7 @@ class SettingsSidebarWidget(QWidget):
         form_layout = QFormLayout()
         form_layout.setContentsMargins(0, 0, 0, 0)
         form_layout.setSpacing(6)
+        form_layout.addRow("UI font family", self._ui_font_combo)
         form_layout.addRow("UI font size", self._ui_font_spin)
         content_layout.addLayout(form_layout)
         content_layout.addStretch()
